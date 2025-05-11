@@ -16,6 +16,7 @@ class PiHoleClient:
         self.client = requests.Session()
         self.authenticate()
 
+
     def authenticate(self):
         url = f"https://{self.endpoint}/api/auth"
         payload = {"password": self.password}
@@ -32,6 +33,7 @@ class PiHoleClient:
             raise Exception(f"Error cannot authenticate to PiHole: {e}")
         except KeyError as e:
             raise Exception(f"Failed to parse authentication response: {e}")
+
 
     def get_padd_data(self):
         print("⬇ Fetching PADD data from Pi-hole server...")

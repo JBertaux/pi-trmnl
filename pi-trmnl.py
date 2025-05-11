@@ -5,10 +5,13 @@ from pihole_client import PiHoleClient
 from trmnl_client import TrmnlClient
 import urllib3
 
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 def round_to_2_decimal(value):
     return f"{value:.2f}"
+
 
 def seconds_to_human_readable(seconds):
     years = seconds // 31_536_000  # 1 year = 365 days
@@ -33,6 +36,7 @@ def seconds_to_human_readable(seconds):
         result.append(f"{seconds} seconds")
 
     return ", ".join(result)
+
 
 def process_padd(data):
     print("⚙️ Convert PADD data...")
@@ -83,6 +87,7 @@ def process_padd(data):
 
     return data_output
 
+
 def main():
     parser = argparse.ArgumentParser(description="Fetches PADD data from a Pi-hole server and publishes it to a TRMNL plugin.")
     parser.add_argument("-e", "--pihole-endpoint", required=True, help="The endpoint of your Pi-hole server")
@@ -102,6 +107,7 @@ def main():
         trmnl_client.send_data(processed_data)
     else:
         print("Failed to retrieve PADD data.")
+
 
 if __name__ == "__main__":
     main()

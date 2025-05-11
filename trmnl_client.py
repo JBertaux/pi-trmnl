@@ -1,11 +1,11 @@
 import requests
-import json
 
 
 class TrmnlClient:
     def __init__(self, plugin_id: str):
         self.plugin_id = plugin_id
         self.client = requests.Session()
+
 
     def send_data(self, data: dict):
         print("📤 Sending data to TRMNL plugin...")
