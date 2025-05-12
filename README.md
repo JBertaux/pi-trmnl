@@ -1,5 +1,7 @@
 # pi-trmnl
 
+![PiTrmnl Screen](examples/example-1.png?raw=true "PiTrmnl Screen")
+
 Python script to push your Pi-Hole stats to a custom TRMNL plugin
 
 ## How to run it ?
