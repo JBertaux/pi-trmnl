@@ -82,8 +82,8 @@
                     </div>
                     <div>
                         <span class="title title--small">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 class="icon icon-tabler icons-tabler-outline icon-tabler-refresh">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
@@ -96,36 +96,19 @@
             
                 <div class="grid grid--cols-3">
                     <div>
-                        <div id="percent_blocked" class="h--24"></div>
+                        <div id="percent_blocked" class="h--48"></div>
                         <span class="description text--center">Queries Blocked (%)</span>
                     </div>
                     <div>
-                        <div id="cpu_percent" class="h--24"></div>
+                        <div id="cpu_percent" class="h--48"></div>
                         <span class="description text--center">CPU Usage (%)</span>
                     </div>
                     <div>
-                        <div id="memory_usage" class="h--24"></div>
+                        <div id="memory_usage" class="h--48"></div>
                         <span class="description text--center">Memory Usage (%)</span>
                     </div>
                 </div>
             
-            
-                <div class="columns">
-                    <div class="column">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td><span class="title title--small">Model</span></td>
-                                    <td><span class="label">{{ host_model }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="title title--small">Uptime</span></td>
-                                    <td><span class="label">{{ uptime }}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
             
             <div class="title_bar">
@@ -140,7 +123,7 @@
                     Highcharts.chart(containerId, {
                         chart: {
                             type: "gauge",
-                            height: "50%"
+                            height: "90%"
                         },
                         title: {
                             text: null
@@ -230,7 +213,7 @@
                 var memory_percent = {{ memory_usage }};
                 createGaugeChart('memory_usage', memory_percent, "Memory Usage (%)");
 
-               </script>
+            </script>
 
             <!-- END SCREEN HERE  -->
         </div>
