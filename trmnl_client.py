@@ -22,6 +22,7 @@ class TrmnlClient:
                 print(f"Response: {response.text}")
             else:
                 print(f"Failed to send data: {response.status_code}")
+                print(f"Error: {response}")
         except requests.RequestException as e:
             print(f"Error sending data: {e}")
 

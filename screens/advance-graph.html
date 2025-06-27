@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://usetrmnl.com/css/latest/plugins.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;350;375;400;450;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://usetrmnl.com/js/latest/plugins.js"></script>
+</head>
+
+<body class="environment trmnl">
+    <div class="screen">
+        <div class="view view--full">
+            <!-- INSERT SCREEN HERE  -->
+
+            <script src="https://code.highcharts.com/highcharts.js"></script>
+
+            <div class="layout layout--col gap--none">
+
+                <div class="mb--10">
+                    <span class="title">
+                        <svg fill="#000000" width="80" height="80" viewBox="0 0 24 24" role="img"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <title>Pi-hole icon</title>
+                            <path
+                                d="M9.375,8.782l-4.442,4.44c-1.451,1.45-1.451,3.803,0,5.253l4.442,4.439c1.45,1.449,3.799,1.449,5.249,0l4.442-4.439c1.451-1.45,1.452-3.803,0-5.253l-4.442-4.44C13.175,7.333,10.825,7.333,9.375,8.782z M10.595,7.38C7.597,7.06,4.577,4.794,4.338,0c4.652,0,7.14,2.754,7.38,7.118c0.88-5.234,5.003-4.621,5.003-4.621c0.196,2.966-2.24,4.765-5.003,4.914c-0.776-1.636-5.426-5.648-5.426-5.648C6.287,1.759,6.278,1.759,6.274,1.765C6.271,1.768,6.27,1.774,6.272,1.778C6.272,1.778,10.759,5.687,10.595,7.38 M11.994,17.684c-2.231,0.165-3.212,1.738-3.148,3.274c-0.003-0.036-0.007-0.07-0.009-0.107c-0.133-1.848,1.327-3.21,1.327-5.005c-0.172-2.322-1.869-3.287-3.462-3.133c0.101-0.012,0.204-0.022,0.313-0.028c1.848-0.133,3.212,1.327,5.005,1.327c2.082-0.157,3.074-1.537,3.146-2.969c0.022,1.75-1.331,3.079-1.331,4.81c0.165,2.23,1.736,3.21,3.271,3.148c-0.036,0.003-0.07,0.007-0.107,0.009C15.151,19.144,13.787,17.684,11.994,17.684z" />
+                        </svg>
+                        Host: {{ node_name }}
+                    </span>
+                </div>
+
+                <div class="flex flex--row mb--1">
+                    <div>
+                        <span class="title title--small">Blocking</span>
+                    </div>
+                    <div>
+                        <span class="title title--small">
+                            {% if blocking == 'enabled' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-check">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>
+                            {% elsif blocking == 'disabled' %}
+
+                            {% else %}
+                            {{ blocking }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div></div>
+                    <div>
+                        <span class="title title--small">CPU Temp</span>
+                    </div>
+                    <div>
+                        <span class="title title--small value--tnums">
+                            {{ cpu_temp }} {{ cpu_unit }}
+                        </span>
+                    </div>
+                    <div>
+                        <span class="title title--small">
+                            {% if cpu_temp >= cpu_limit %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-flame">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M12 10.941c2.333 -3.308 .167 -7.823 -1 -8.941c0 3.395 -2.235 5.299 -3.667 6.706c-1.43 1.408 -2.333 3.621 -2.333 5.588c0 3.704 3.134 6.706 7 6.706s7 -3.002 7 -6.706c0 -1.712 -1.232 -4.403 -2.333 -5.588c-2.084 3.353 -3.257 3.353 -4.667 2.235" />
+                            </svg>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if version_ftl_update == "True" or version_web_update == "True" or version_core_update == "True"
+                    %}
+                    <div>
+                        <span class="title title--small">Update</span>
+                    </div>
+                    <div>
+                        <span class="title title--small">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-refresh">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+                                <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+                            </svg>
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="grid grid--cols-3">
+                    <div>
+                        <div id="percent_blocked" class="h--48"></div>
+                        <span class="description text--center">Queries Blocked (%)</span>
+                    </div>
+                    <div>
+                        <div id="cpu_percent" class="h--48"></div>
+                        <span class="description text--center">CPU Usage (%)</span>
+                    </div>
+                    <div>
+                        <div id="memory_usage" class="h--48"></div>
+                        <span class="description text--center">Memory Usage (%)</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="title_bar">
+                <img class="image" src="https://usetrmnl.com/images/plugins/trmnl--render.svg">
+                <span class="title">{{ trmnl.plugin_settings.instance_name }}</span>
+                <span class="instance">{{ last_refreshed }}</span>
+            </div>
+
+            <script type="text/javascript">
+
+                function mergeArrays(array_a, array_b) {
+                    return array_a.map((item, idx) => [item, array_b[idx]]);
+                }
+
+                function createLineGraph(containerId, values) {
+                    Highcharts.chart(containerId, {
+                        chart: {
+                            type: "line",
+                            height: null,
+                            width: null,
+                            animation: false
+                            //spacing: [10, 10, 5, 10]
+                        },
+                        title: {
+                            text: null
+                        },
+                        plotOptions: {
+                            series: {
+                                animation: false,
+                                enableMouseTracking: false,
+                                states: {
+                                    hover: { enabled: false }
+                                },
+                                marker: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        series: [{
+                            data: values,
+                            lineWidth: 4,
+                            color: "#000000",
+                            name: "test"
+                        }],
+                        tooltip: { enabled: false },
+                        legend: { enabled: false },
+                        yAxis: {
+                            labels: {
+                                style: { fontSize: "16px", color: "#000000" }
+                            },
+                            gridLineDashStyle: "shortdot",
+                            gridLineWidth: 1,
+                            gridLineColor: "#000000",
+                            tickAmount: 5,
+                            min: 0,
+                            //max: 100,
+                            title: {
+                                text: null
+                            }
+                        },
+                        xAxis: {
+                            type: "datetime",
+                            labels: {
+                                style: { fontSize: "16px", color: "#000000" },
+                                padding: 5,
+                                y: 25
+                            },
+                            lineWidth: 0,
+                            gridLineDashStyle: "dot",
+                            tickWidth: 1,
+                            tickLength: 0,
+                            gridLineWidth: 1,
+                            gridLineColor: "#000000",
+                            tickPixelInterval: 120,
+                            title: {
+                                text: null
+                            }
+                        },
+                        credits: {
+                            enabled: false
+                        }
+                    });
+                }
+
+                var times = {{ hist_last_refreshed | json }};
+                var query_values = {{ hist_query_percent_blocked | json }};
+                var histo_query = mergeArrays(times, query_values);
+
+                createLineGraph('percent_blocked', histo_query);
+
+                var cpu_values = {{ hist_cpu_percent | json }};
+                var histo_cpu = mergeArrays(times, cpu_values);
+
+                createLineGraph('cpu_percent', histo_cpu);
+
+                var memory_values = {{ hist_memory_usage | json }};
+                var histo_memory = mergeArrays(times, memory_values);
+
+                createLineGraph('memory_usage', histo_memory);
+
+            </script>
+
+
+            <!-- END SCREEN HERE  -->
+        </div>
+    </div>
+</body>
+
+</html>

@@ -4,6 +4,8 @@ from datetime import datetime
 from pihole_client import PiHoleClient
 from trmnl_client import TrmnlClient
 import urllib3
+import os
+import csv
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -88,6 +90,43 @@ def process_padd(data):
     return data_output
 
 
+def persist_metrics_to_csv(data):
+    fields = ["cpu_percent", "cpu_temp", "memory_usage", "query_percent_blocked", "last_refreshed"]
+    row = [data[field] for field in fields]
+
+    # Read existing rows if file exists
+    rows = []
+    if os.path.exists("pihole-metrics.csv"):
+        with open("pihole-metrics.csv", "r", newline="") as csvfile:
+            reader = csv.reader(csvfile)
+            rows = list(reader)
+
+    # Append new row and keep only last X
+    rows.append(row)
+    rows = rows[-50:]
+
+    # Write back to file
+    with open("pihole-metrics.csv", "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(rows)
+    
+    print("💾 Persisted historic data successfully.")
+    
+    columns_map = {}
+    for i, field in enumerate(fields):
+        col = [row[i] for row in rows]
+        if field != "last_refreshed":
+            # Cast to float
+            col = [float(v) for v in col]
+        columns_map[f"hist_{field}"] = col
+    
+    merged_data = {**data, **columns_map} 
+
+    print("📊 Added historic data successfully.")
+    print(merged_data)
+    return merged_data
+
+
 def main():
     parser = argparse.ArgumentParser(description="Fetches PADD data from a Pi-hole server and publishes it to a TRMNL plugin.")
     parser.add_argument("-e", "--pihole-endpoint", required=True, help="The endpoint of your Pi-hole server")
@@ -104,7 +143,8 @@ def main():
     data = client.get_padd_data()
     if data:
         processed_data = process_padd(data)
-        trmnl_client.send_data(processed_data)
+        history_data = persist_metrics_to_csv(processed_data)
+        trmnl_client.send_data(history_data)
     else:
         print("Failed to retrieve PADD data.")
 
