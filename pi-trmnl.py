@@ -91,7 +91,7 @@ def process_padd(data):
 
 
 def persist_metrics_to_csv(data):
-    fields = ["cpu_percent", "cpu_temp", "memory_usage", "query_percent_blocked", "last_refreshed"]
+    fields = ["cpu_percent", "memory_usage", "query_percent_blocked", "last_refreshed"]
     row = [data[field] for field in fields]
 
     # Read existing rows if file exists
