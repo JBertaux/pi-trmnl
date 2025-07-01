@@ -103,7 +103,7 @@ def persist_metrics_to_csv(data):
 
     # Append new row and keep only last X
     rows.append(row)
-    rows = rows[-50:]
+    rows = rows[-35:]
 
     # Write back to file
     with open("pihole-metrics.csv", "w", newline="") as csvfile:
