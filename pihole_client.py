@@ -33,14 +33,33 @@ class PiHoleClient:
             raise Exception(f"Error cannot authenticate to PiHole: {e}")
         except KeyError as e:
             raise Exception(f"Failed to parse authentication response: {e}")
+        
+
+    def get_history(self):
+        print("⬇ Fetching History data from Pi-hole server...")
+        if not self.session:
+            raise Exception("You must authenticate first.")
+        url = f"https://{self.endpoint}/api/history"
+        headers = {
+            "X-FTL-SID": self.session.sid,
+            "X-FTL-CSRF": self.session.csrf,
+            "Accept": "application/json"
+        }
+
+        try:
+            response = self.client.get(url, headers=headers, verify=False)
+            response.raise_for_status()
+            return response.json()
+        except RequestException as e:
+            print(f"Failed to fetch History data: {e}")
+            raise Exception("Failed to fetch History data") from e
 
 
     def get_padd_data(self):
         print("⬇ Fetching PADD data from Pi-hole server...")
 
         if not self.session:
-            print("You must authenticate first.")
-            return None
+            raise Exception("You must authenticate first.")
 
         url = f"https://{self.endpoint}/api/padd?full=true"
         headers = {
@@ -54,5 +73,5 @@ class PiHoleClient:
             return response.text
         except RequestException as e:
             print(f"Failed to fetch PADD data: {e}")
-            return None
+            raise Exception("Failed to fetch PADD data") from e
 

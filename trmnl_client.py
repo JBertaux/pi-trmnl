@@ -1,5 +1,5 @@
 import requests
-
+import json
 
 class TrmnlClient:
     def __init__(self, plugin_id: str):
@@ -12,8 +12,10 @@ class TrmnlClient:
 
         url = f"https://usetrmnl.com/api/custom_plugins/{self.plugin_id}"
         payload = {
-            "merge_variables": data
+            "merge_variables": json.dumps(data, separators=(',', ':'))
         }
+
+        print(f"Payload to send: {payload}")
 
         try:
             response = self.client.post(url, headers={"Content-Type": "application/json"}, json=payload)
@@ -21,8 +23,8 @@ class TrmnlClient:
                 print("Data sent successfully.")
                 print(f"Response: {response.text}")
             else:
-                print(f"Failed to send data: {response.status_code}")
-                print(f"Error: {response}")
+                print(f"Failed to send data: {response.status_code} - {response.reason}")
+                print(f"Error: {response.text}")
         except requests.RequestException as e:
             print(f"Error sending data: {e}")
 
