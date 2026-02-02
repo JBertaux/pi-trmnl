@@ -2,6 +2,8 @@ package be.jeromebertaux.pitrmnl;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -10,11 +12,13 @@ import java.util.Locale;
 
 public class DataProcessor {
 
+    private static final Logger logger = LoggerFactory.getLogger(DataProcessor.class);
+
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             .withZone(ZoneId.systemDefault());
 
     public static JSONObject processPadd(String data) {
-        System.out.println("⚙️ Convert PADD data...");
+        logger.info("⚙️ Convert PADD data...");
         JSONObject jsonData = new JSONObject(data);
 
         JSONObject dataOutput = new JSONObject();
@@ -61,13 +65,13 @@ public class DataProcessor {
         String lastRefreshed = FORMATTER.format(Instant.now());
         dataOutput.put("last_refreshed", lastRefreshed);
 
-        System.out.println("📊 PADD data converted successfully.");
+        logger.info("📊 PADD data converted successfully.");
 
         return dataOutput;
     }
 
     public static JSONObject processHistory(JSONObject jsonHistory) {
-        System.out.println("⚙️ Convert History data...");
+        logger.info("⚙️ Convert History data...");
 
         JSONArray historyEntries = jsonHistory.getJSONArray("history");
         int startIndex = Math.max(0, historyEntries.length() - 40);
@@ -94,7 +98,7 @@ public class DataProcessor {
         dataOutput.put("query_blocked", queryBlocked);
         dataOutput.put("query_date", queryDate);
 
-        System.out.println("📊 History data converted successfully.");
+        logger.info("📊 History data converted successfully.");
 
         return dataOutput;
     }

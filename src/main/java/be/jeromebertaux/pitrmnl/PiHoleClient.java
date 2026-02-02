@@ -1,6 +1,8 @@
 package be.jeromebertaux.pitrmnl;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.Socket;
 import java.net.URI;
@@ -16,6 +18,8 @@ import javax.net.ssl.X509ExtendedTrustManager;
 import java.security.cert.X509Certificate;
 
 public class PiHoleClient {
+    private static final Logger logger = LoggerFactory.getLogger(PiHoleClient.class);
+    
     private final String endpoint;
     private final String password;
     private final HttpClient httpClient;
@@ -106,7 +110,7 @@ public class PiHoleClient {
     }
 
     public String getPaddData() {
-        System.out.println("⬇ Fetching PADD data from Pi-hole server...");
+        logger.info("⬇ Fetching PADD data from Pi-hole server...");
 
         if (session == null) {
             throw new RuntimeException("You must authenticate first.");
@@ -130,13 +134,13 @@ public class PiHoleClient {
                 throw new RuntimeException("Failed to fetch PADD data: " + response.statusCode() + " - " + response.body());
             }
         } catch (Exception e) {
-            System.out.println("Failed to fetch PADD data: " + e.getMessage());
+            logger.error("Failed to fetch PADD data", e);
             throw new RuntimeException("Failed to fetch PADD data", e);
         }
     }
 
     public JSONObject getHistory() {
-        System.out.println("⬇ Fetching History data from Pi-hole server...");
+        logger.info("⬇ Fetching History data from Pi-hole server...");
 
         if (session == null) {
             throw new RuntimeException("You must authenticate first.");
@@ -161,7 +165,7 @@ public class PiHoleClient {
                 throw new RuntimeException("Failed to fetch History data: " + response.statusCode() + " - " + response.body());
             }
         } catch (Exception e) {
-            System.out.println("Failed to fetch History data: " + e.getMessage());
+            logger.error("Failed to fetch History data", e);
             throw new RuntimeException("Failed to fetch History data", e);
         }
     }

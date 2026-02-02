@@ -1,6 +1,8 @@
 package be.jeromebertaux.pitrmnl;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -10,6 +12,8 @@ import java.util.concurrent.Callable;
 @Command(name = "pi-trmnl", mixinStandardHelpOptions = true, version = "1.0.0",
         description = "Fetches PADD data from a Pi-hole server and publishes it to a TRMNL plugin.")
 public class Main implements Callable<Integer> {
+
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     @Option(names = {"-e", "--pihole-endpoint"}, required = true, 
             description = "The endpoint of your Pi-hole server")
@@ -30,7 +34,7 @@ public class Main implements Callable<Integer> {
 
     @Override
     public Integer call() {
-        System.out.println("★ Pi-Trmnl");
+        logger.info("★ Pi-Trmnl");
 
         try {
             PiHoleClient client = new PiHoleClient(piholeEndpoint, piholePassword);
@@ -49,8 +53,7 @@ public class Main implements Callable<Integer> {
 
             return 0;
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error in execution", e);
             return 1;
         }
     }

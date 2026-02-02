@@ -1,6 +1,8 @@
 package be.jeromebertaux.pitrmnl;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -9,6 +11,8 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 public class TrmnlClient {
+    private static final Logger logger = LoggerFactory.getLogger(TrmnlClient.class);
+    
     private final String pluginId;
     private final HttpClient httpClient;
 
@@ -20,13 +24,13 @@ public class TrmnlClient {
     }
 
     public void sendData(JSONObject data) {
-        System.out.println("📤 Sending data to TRMNL plugin...");
+        logger.info("📤 Sending data to TRMNL plugin...");
 
         String url = "https://usetrmnl.com/api/custom_plugins/" + pluginId;
         JSONObject payload = new JSONObject();
         payload.put("merge_variables", data.toString());
 
-        System.out.println("Payload to send: " + payload);
+        logger.debug("Payload to send: {}", payload);
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -38,14 +42,13 @@ public class TrmnlClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             
             if (response.statusCode() == 200) {
-                System.out.println("Data sent successfully.");
-                System.out.println("Response: " + response.body());
+                logger.info("Data sent successfully.");
+                logger.debug("Response: {}", response.body());
             } else {
-                System.out.println("Failed to send data: " + response.statusCode() + " - " + response.body());
+                logger.error("Failed to send data: {} - {}", response.statusCode(), response.body());
             }
         } catch (Exception e) {
-            System.out.println("Error sending data: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error sending data", e);
         }
     }
 }
