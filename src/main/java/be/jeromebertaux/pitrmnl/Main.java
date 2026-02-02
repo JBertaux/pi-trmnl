@@ -1,6 +1,10 @@
 package be.jeromebertaux.pitrmnl;
 
-import org.json.JSONObject;
+import be.jeromebertaux.pitrmnl.client.PiHoleClient;
+import be.jeromebertaux.pitrmnl.client.TrmnlClient;
+import be.jeromebertaux.pitrmnl.type.HistoryData;
+import be.jeromebertaux.pitrmnl.type.PaddData;
+import be.jeromebertaux.pitrmnl.type.ScreenVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
@@ -13,7 +17,7 @@ import java.util.concurrent.Callable;
         description = "Fetches PADD data from a Pi-hole server and publishes it to a TRMNL plugin.")
 public class Main implements Callable<Integer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     @Option(names = {"-e", "--pihole-endpoint"}, required = true, 
             description = "The endpoint of your Pi-hole server")
@@ -34,26 +38,21 @@ public class Main implements Callable<Integer> {
 
     @Override
     public Integer call() {
-        logger.info("★ Pi-Trmnl");
+        LOGGER.info("★ Pi-Trmnl");
 
         try {
             PiHoleClient client = new PiHoleClient(piholeEndpoint, piholePassword);
             TrmnlClient trmnlClient = new TrmnlClient(trmnlPlugin);
 
-            JSONObject processedData = DataProcessor.processPadd(client.getPaddData());
-            JSONObject historyData = DataProcessor.processHistory(client.getHistory());
+            final PaddData paddData = client.getPaddData();
+            final HistoryData history = client.getHistory();
 
-            // Merge data
-            JSONObject dataToSend = new JSONObject(processedData.toString());
-            for (String key : historyData.keySet()) {
-                dataToSend.put(key, historyData.get(key));
-            }
-
-            trmnlClient.sendData(dataToSend);
+            final ScreenVariables screenVariables = new ScreenVariables(paddData, history);
+            trmnlClient.sendData(screenVariables);
 
             return 0;
         } catch (Exception e) {
-            logger.error("Error in execution", e);
+            LOGGER.error("Error in execution", e);
             return 1;
         }
     }
