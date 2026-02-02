@@ -15,5 +15,5 @@ crontab -e
 ### Cron configuration
 
 ```txt
-0 */6 * * * python3 /home/pi/pi-trmnl/pi-trmnl/pi-trmnl.py -e <PIHOLE-ENDPOINT> -p <PIHOLE-PASSWORD> -t <TRMNL-PLUGIN-ID> > ~/crontab_log.txt
+0 */6 * * * java -jar build/libs/pi-trmnl-1.0.0-fat.jar -e <PIHOLE-ENDPOINT> -p <PIHOLE-PASSWORD> -t <TRMNL-PLUGIN-ID> > ~/crontab_log.txt
 ```
