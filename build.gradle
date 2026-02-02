@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'be.jeromebertaux'
+version = '1.0.0'
+description = 'Pi-Trmnl - Fetches data from Pi-hole and sends to TRMNL'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.json:json:20251224'
+    implementation 'info.picocli:picocli:4.7.7'
+}
+
+application {
+    mainClass = 'be.jeromebertaux.pitrmnl.Main'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass
+        )
+    }
+}
+
+tasks.register('fatJar', Jar) {
+    archiveClassifier.set('fat')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+    manifest {
+        attributes(
+            'Main-Class': application.mainClass
+        )
+    }
+}
+
+build {
+    dependsOn fatJar
+}

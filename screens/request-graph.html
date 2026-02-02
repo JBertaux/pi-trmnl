@@ -22,7 +22,7 @@
 
 <div class="layout layout--col">
 
-    <div class="flex flex--row">
+    <div class="flex flex--row flex--center-x flex--center-y">
         <div>
             <span class="title title--small">
                 <svg fill="#000000" width="50" height="50" viewBox="0 0 24 24" role="img"
@@ -37,6 +37,8 @@
         <div>
             <span class="title title--small">Host: {{ node_name }}</span>
         </div>
+
+        <div></div>
 
         <div>
             <span class="title title--small">Blocking</span>
@@ -65,14 +67,6 @@
         </div>
         <div></div>
         <div>
-            <span class="title title--small">CPU Temp</span>
-        </div>
-        <div>
-            <span class="title title--small value--tnums">
-                {{ cpu_temp }} {{ cpu_unit }}
-            </span>
-        </div>
-        <div>
             <span class="title title--small">
                 {% if cpu_temp >= cpu_limit %}
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none"
@@ -85,7 +79,7 @@
                 {% endif %}
             </span>
         </div>
-        {% if update == "True" %}
+        {% if update == "true" %}
         <div>
             <span class="title title--small">Update</span>
         </div>
@@ -103,19 +97,31 @@
         {% endif %}
     </div>
 
-    <div class="grid grid--cols-3">
-        <div>
+    <div class="grid grid--cols-6">
+        <div class="col--span-5">
             <div id="percent_blocked" class="h--[300px]"></div>
+        </div>
+        <div class="col--span-1">
+            <div class="flex flex--col flex--right flex--top">
+                <span class="title title--small text--center">CPU temp</span>
+                <span class="value value--xxsmall value--tnums">{{ cpu_temp }} {{ cpu_unit }}</span>
+                <div></div>
+                <span class="title title--small text--center">CPU Load (%)</span>
+                <span class="value value--xxsmall value--tnums">{{ cpu_load[0] }}</span>
+                <span class="value value--xxsmall value--tnums">{{ cpu_load[1] }}</span>
+                <span class="value value--xxsmall value--tnums">{{ cpu_load[2] }}</span>
+                <div></div>
+                <span class="title title--small text--center">Memory (%)</span>
+                <span class="value value--xxsmall value--tnums">{{ memory_usage }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid--cols-6">
+        <div class="col--span-5 text--center">
             <span class="title title--small text--center">Queries Blocked (%)</span>
         </div>
-        <div>
-            <div id="cpu_percent" class="h--[300px]"></div>
-            <span class="title title--small text--center">CPU Usage (%)</span>
-        </div>
-        <div>
-            <div id="memory_usage" class="h--[300px]"></div>
-            <span class="title title--small text--center">Memory Usage (%)</span>
-        </div>
+
     </div>
 
 </div>
@@ -191,27 +197,6 @@
         }
     };
 
-    function createLineGraph(containerId, values) {
-        const specificOptions = {
-            chart: {
-                type: "line",
-                height: null,
-                width: null,
-                animation: false
-            },
-            series: [{
-                data: values,
-                lineWidth: 4,
-                color: "#000000",
-                name: "DATA"
-            }]
-        };
-        Highcharts.chart(containerId, {
-            ...defaultChartOptions,
-            ...specificOptions
-        });
-    }
-
     function createSpLineGraph(containerId, firstSeries, secondSeries) {
         const specificOptions = {
             chart: {
@@ -254,17 +239,6 @@
     var blocked_series = mergeArrays(timesQuery, query_blocked_values);
 
     createSpLineGraph('percent_blocked', total_series, blocked_series);
-
-    var times = {{ hist_last_refreshed | json }};
-    var cpu_values = {{ hist_cpu_percent | json }};
-    var histo_cpu = mergeArrays(times, cpu_values);
-
-    createLineGraph('cpu_percent', histo_cpu);
-
-    var memory_values = {{ hist_memory_usage | json }};
-    var histo_memory = mergeArrays(times, memory_values);
-
-    createLineGraph('memory_usage', histo_memory);
 
 </script>
 
