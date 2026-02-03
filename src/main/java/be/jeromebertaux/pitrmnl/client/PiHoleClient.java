@@ -30,7 +30,7 @@ public class PiHoleClient {
     private final HttpClient httpClient;
     private Session session;
 
-    public PiHoleClient(String endpoint, String password) {
+    public PiHoleClient(final String endpoint, final String password) {
         this.endpoint = endpoint;
         this.password = password;
         this.httpClient = createInsecureHttpClient();
@@ -85,7 +85,7 @@ public class PiHoleClient {
         }
     }
 
-    public void authenticate() {
+    private void authenticate() {
         String url = "https://" + endpoint + "/api/auth";
         ObjectNode payload = OBJECT_MAPPER.createObjectNode();
         payload.put("password", password);

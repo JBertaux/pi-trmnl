@@ -31,7 +31,7 @@ public class Main implements Callable<Integer> {
             description = "The plugin UUID of your TRMNL plugin")
     private String trmnlPlugin;
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         int exitCode = new CommandLine(new Main()).execute(args);
         System.exit(exitCode);
     }

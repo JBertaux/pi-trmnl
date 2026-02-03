@@ -19,7 +19,7 @@ public class TrmnlClient {
     private final String pluginId;
     private final HttpClient httpClient;
 
-    public TrmnlClient(String pluginId) {
+    public TrmnlClient(final String pluginId) {
         this.pluginId = pluginId;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
