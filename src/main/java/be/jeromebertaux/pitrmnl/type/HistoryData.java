@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import static be.jeromebertaux.pitrmnl.util.TypeConverter.OBJECT_MAPPER;
 
 public record HistoryData(List<HistoryEntry> history) {
-    private static final int MAX_HISTORY_ENTRIES = 40;
+    private static final int MAX_HISTORY_ENTRIES = 80;
     public record HistoryEntry(long timestamp, int total, int cached, int blocked, int forwarded) {
     }
 
