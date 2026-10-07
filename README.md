@@ -6,6 +6,14 @@ Rust script to push your Pi-Hole stats to a custom TRMNL plugin
 
 ## How to run it ?
 
+### Prerequisite
+
+On raspberry
+
+```bash
+sudo apt install libssl-dev
+```
+
 ### Build it
 
 ```bash
